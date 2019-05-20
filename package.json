@@ -1,0 +1,14 @@
+{
+  "name": "passwd_service",
+  "version": "1.0.0",
+  "description": "Exposes /etc/passwd and /etc/group files as JSON responses to list specified users and groups on the system.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js -passwd (/etc/passwd) -group (/etc/group)"
+  },
+  "author": "Diego Mejia diegomejia87@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.0"
+  }
+}
