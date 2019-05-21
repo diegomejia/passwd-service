@@ -14,7 +14,7 @@ let passwd = { buffer: "default value",
 
 // Function Definitions
 let logPortNumber = function(){
-  console.log('passwd_service listening on port ' + port.toString())
+  console.log('passwd_service listening on port ' + port.toString());
 };
 
 let readCallback = function(error, data){
@@ -23,7 +23,7 @@ let readCallback = function(error, data){
   } else {
     passwd.buffer = data;
   }
- }
+};
 
 let serviceGetRequest = function(request, response){
   //fs.readFile(passwd.location, {encoding: 'utf-8', flag: 'r'}, readCallback);
@@ -43,12 +43,17 @@ let serviceGetRequest = function(request, response){
    //   console.log(file);
    // }
   response.send(passwd.buffer);
-}
+};
 
+let serviceUsersRequest = function(request, response){
+  // Scaffolding..
+  response.send('Users Request Received.')
+};
 // Function Calls
 // Open and read file with UTF-8 encoding
 //fs.readFile(passwd.location, {encoding:'utf-8', flag:'r'}, readCallback);
 
 app.get('/', serviceGetRequest);
+app.get('/users', serviceUsersRequest);
 
 app.listen(port, logPortNumber);
