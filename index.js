@@ -31,6 +31,41 @@ let serviceGetRequest = function(request, response){
    let file = readFile(passwd.location, 'utf-8').then(
      function(data){
        passwd.buffer = data;
+
+       let passwdArray = data.split("\n");
+       let filteredPasswdArray = [];
+       passwdArray.forEach(function(line){
+         //remove comments(lines beginning with '#') and any empty lines
+         if(line.charAt(0) != "#" && line != ""){
+            filteredPasswdArray.push(line);
+        }
+       });
+
+       let filteredUsersArray = [];
+       // Expected format for each line, 7 values
+       // username:password:user_id:group_id:user_id_info:home_directory:shell
+       filteredPasswdArray.forEach(function(line){
+         let values = [];
+         let user = {
+           name: "",
+           uid: "",
+           gid: "",
+           comment: "",
+           home: "",
+           shell: ""
+         };
+         values = line.split(":"); //passwd and group files are colon delimited
+         if(values.length == 7){
+           //construct users object
+           user.name = values[0];
+           // skip password field values[1]
+           user.uid = values[2];
+           user.gid = values[3];
+           user.comment = values[4];
+           user.home = values[5];
+           user.shell = values[6];
+         }
+       });
        //console.log(data);
        return data;
      }
