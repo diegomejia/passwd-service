@@ -64,7 +64,11 @@ let serviceGetRequest = function(request, response){
            user.comment = values[4];
            user.home = values[5];
            user.shell = values[6];
+
+           //push onto Object array
+           filteredUsersArray.push(user);
          }
+
        });
        //console.log(data);
        return data;
