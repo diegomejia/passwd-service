@@ -9,6 +9,7 @@
   "author": "Diego Mejia diegomejia87@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.0"
+    "express": "^4.17.0",
+    "fs-readfile-promise": "^3.0.1"
   }
 }
