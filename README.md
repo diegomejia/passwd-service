@@ -10,8 +10,8 @@ Requires NodeJS to be installed.
 Can be found here: 
 https://nodejs.org/en/
 
-Then download the passwd-service folder
-To run local server (port 2000) open a terminal, go to passwd-service folder and run:
+Next clone or download the passwd-service project.
+To run the local server (port 2000) open a terminal, go to passwd-service folder and run:
 
 node index.js
 
@@ -20,3 +20,5 @@ node index.js
 Is printed in the terminal to verify the (ExpressJS) server is running and listening for GET requests.
 
 To send a request open a web browser and go to http://localhost:2000/
+
+To STOP the server hit Ctrl-C in the terminal window running it.
