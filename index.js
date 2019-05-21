@@ -30,7 +30,7 @@ let serviceGetRequest = function(request, response){
 
    let file = readFile(passwd.location, 'utf-8').then(
      function(data){
-       passwd.buffer = data;
+       let tmpDataBuffer = "";
 
        let passwdArray = data.split("\n");
        let filteredPasswdArray = [];
@@ -68,14 +68,15 @@ let serviceGetRequest = function(request, response){
            //push onto Object array
            filteredUsersArray.push(user);
          }
-
        });
+       tmpDataBuffer = JSON.stringify(filteredUsersArray);
        //console.log(data);
-       return data;
+       passwd.buffer = tmpDataBuffer;
+       return tmpDataBuffer;
      }
    ).catch( function(err){
      console.log("Error attempting to read file. Location does not exist.")
-     return null;
+     return "Error: Error attempting to read file. Location does not exist.";
    } );
    // if(file != null){
    //   debugger;
