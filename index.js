@@ -36,10 +36,9 @@ let serviceGetRequest = function(request, response){
 };
 
 let serviceUsersRequest = function(request, response){
+  let tmpDataBuffer = "";
   let file = readFile(passwd.location, 'utf-8').then(
        function(data){
-         let tmpDataBuffer = "";
-
          let passwdArray = data.split("\n");
          let filteredPasswdArray = [];
          passwdArray.forEach(function(line){
@@ -83,10 +82,11 @@ let serviceUsersRequest = function(request, response){
          return tmpDataBuffer;
        }
      ).catch( function(err){
-       console.log("Error attempting to read file. Location does not exist.")
-       return "Error: Error attempting to read file. Location does not exist.";
-     } );
-  response.send(passwd.buffer);
+       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
+       return tmpDataBuffer;
+     } ).finally(function(){
+       response.send(tmpDataBuffer);
+     });
 };
 
 let serviceGetUsersQueryRequest = function(request, response){
@@ -195,12 +195,8 @@ let serviceGetUsersQueryRequest = function(request, response){
        tmpDataBuffer = "Error attempting to read file. Location does not exist.";
        return tmpDataBuffer;
      }).finally(function(){
-       try{
-         let usersArray = JSON.parse(tmpDataBuffer);
+         //respond with either JSON or No File Error
          response.send(tmpDataBuffer);
-       } catch (e) {
-         response.send(tmpDataBuffer);
-       }
      });
   };
 // Function Calls
