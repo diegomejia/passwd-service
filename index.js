@@ -86,7 +86,6 @@ let serviceUsersRequest = function(request, response){
        console.log("Error attempting to read file. Location does not exist.")
        return "Error: Error attempting to read file. Location does not exist.";
      } );
-  debugger;
   response.send(passwd.buffer);
 };
 
