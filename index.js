@@ -11,6 +11,7 @@ const port = 2000;
 let passwd = { buffer: "default value",
                location: "/etc/passwd"
              };
+let group = { location: "/etc/group"};
 
 // Function Definitions
 let logPortNumber = function(){
@@ -262,10 +263,55 @@ let serviceGetUsersUidRequest = function(request, response){
      });
 };
 
-let serviceGetGroupRequest = function(request, response){
-  //Scaffolding
-  response.send("Received Group Request");
-}
+let serviceGetGroupsRequest = function(request, response){
+  let tmpDataBuffer = "";
+  let file = readFile(group.location, 'utf-8').then(
+       function(data){
+         let groupsArray = data.split("\n");
+         let filteredGroupsArray = [];
+         groupsArray.forEach(function(line){
+           //remove comments(lines beginning with '#') and any empty lines
+           if(line.charAt(0) != "#" && line != ""){
+              filteredGroupsArray.push(line);
+          }
+         });
+
+         let objectifiedGroupsArray = []
+         // Expected format for each line, 4 values
+         // name:password:group_id:group_members
+         filteredGroupsArray.forEach(function(line){
+           let values = [];
+           let groups = {
+             name: "",
+             gid: "",
+             members: []
+           };
+           let groupMembers = "";
+
+           values = line.split(":"); //passwd and group files are colon delimited
+           if(values.length == 4){
+             //construct users object
+             groups.name = values[0];
+             // skip password field values[1]
+             groups.gid = values[2];
+             //push onto Object array
+             if(values[3].includes(",")){
+               groupMembers = values[3].split(",")
+               groups.members = groupMembers;
+             }
+             objectifiedGroupsArray.push(groups);
+           }
+         });
+         tmpDataBuffer = JSON.stringify(objectifiedGroupsArray);
+         return tmpDataBuffer;
+       }
+     ).catch( function(err){
+       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
+       return tmpDataBuffer;
+     }).finally(function(){
+       response.send(tmpDataBuffer);
+     });
+};
 // Function Calls
 // Open and read file with UTF-8 encoding
 //fs.readFile(passwd.location, {encoding:'utf-8', flag:'r'}, readCallback);
@@ -274,6 +320,6 @@ app.get('/', serviceGetRequest);
 app.get('/users', serviceUsersRequest);
 app.get('/users/query', serviceGetUsersQueryRequest);
 app.get(/\/users\/\-*\d+/, serviceGetUsersUidRequest);
-app.get('/groups', serviceGetGroupRequest);
+app.get('/groups', serviceGetGroupsRequest);
 
 app.listen(port, logPortNumber);
