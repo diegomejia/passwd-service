@@ -261,6 +261,11 @@ let serviceGetUsersUidRequest = function(request, response){
        }
      });
 };
+
+let serviceGetGroupRequest = function(request, response){
+  //Scaffolding
+  response.send("Received Group Request");
+}
 // Function Calls
 // Open and read file with UTF-8 encoding
 //fs.readFile(passwd.location, {encoding:'utf-8', flag:'r'}, readCallback);
@@ -269,5 +274,6 @@ app.get('/', serviceGetRequest);
 app.get('/users', serviceUsersRequest);
 app.get('/users/query', serviceGetUsersQueryRequest);
 app.get(/\/users\/\-*\d+/, serviceGetUsersUidRequest);
+app.get('/groups', serviceGetGroupRequest);
 
 app.listen(port, logPortNumber);
