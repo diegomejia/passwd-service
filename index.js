@@ -90,9 +90,119 @@ let serviceUsersRequest = function(request, response){
 };
 
 let serviceGetUsersQueryRequest = function(request, response){
-  //Scaffolding
-  response.send("Query Request Received");
-};
+  let tmpDataBuffer = "default tmpDataBuffer";
+
+  let file = readFile(passwd.location, 'utf-8').then(
+       function(data){
+         let passwdArray = data.split("\n");
+         let filteredPasswdArray = [];
+         passwdArray.forEach(function(line){
+           //remove comments(lines beginning with '#') and any empty lines
+           if(line.charAt(0) != "#" && line != ""){
+              filteredPasswdArray.push(line);
+          }
+         });
+
+         let filteredUsersArray = [];
+         // Expected format for each line, 7 values
+         // username:password:user_id:group_id:user_id_info:home_directory:shell
+         filteredPasswdArray.forEach(function(line){
+           let values = [];
+           let user = {
+             name: "",
+             uid: "",
+             gid: "",
+             comment: "",
+             home: "",
+             shell: ""
+           };
+           values = line.split(":"); //passwd and group files are colon delimited
+           if(values.length == 7){
+             //construct users object
+             user.name = values[0];
+             // skip password field values[1]
+             user.uid = values[2];
+             user.gid = values[3];
+             user.comment = values[4];
+             user.home = values[5];
+             user.shell = values[6];
+
+             //push onto Object array
+             let queries = response.req.query;
+             let queryFlag = false;
+
+             //Must check every query parameter individually for existence.
+             if(queries && queries.name == values[0]){
+               queryFlag = true;
+               if((queries.uid && values[2] != queries.uid) || (queries.gid && values[3] != queries.gid) ||
+                  (queries.comment && values[4] != queries.comment) || (queries.home && values[5] != queries.home) ||
+                  (queries.shell && values [6] != queries.shell)){
+                 queryFlag = false;
+               }
+             }
+             if(queries && queries.uid == values[2]){
+               queryFlag = true;
+               if((queries.name && values[0] != queries.name) || (queries.gid && values[3] != queries.gid) ||
+                  (queries.comment && values[4] != queries.comment) || (queries.home && values[5] != queries.home) ||
+                  (queries.shell && values [6] != queries.shell)){
+                 queryFlag = false;
+               }
+             }
+             if(queries && queries.gid == values[3]){
+               queryFlag = true;
+               if((queries.name && values[0] != queries.name) || (queries.uid && values[2] != queries.uid) ||
+                  (queries.comment && values[4] != queries.comment) || (queries.home && values[5] != queries.home) ||
+                  (queries.shell && values [6] != queries.shell)){
+                 queryFlag = false;
+               }
+             }
+             if(queries && queries.comment == values[4]){
+               queryFlag = true;
+               if((queries.name && values[0] != queries.name) || (queries.uid && values[2] != queries.uid) ||
+                  (queries.gid && values[3] != queries.gid) || (queries.home && values[5] != queries.home) ||
+                  (queries.shell && values [6] != queries.shell)){
+                 queryFlag = false;
+               }
+             }
+             if(queries && queries.home == values[5]){
+               queryFlag = true;
+               if((queries.name && values[0] != queries.name) || (queries.uid && values[2] != queries.uid) ||
+                  (queries.gid && values[3] != queries.gid) || (queries.comment &&  values[4] != queries.comment) ||
+                  (queries.shell &&  values [6] != queries.shell)){
+                 queryFlag = false;
+               }
+             }
+             if(queries && queries.shell == values[6]){
+               queryFlag = true;
+               if((queries.name && values[0] != queries.name) || (queries.uid && values[2] != queries.uid) ||
+                  (queries.gid && values[3] != queries.gid) || (queries.comment && values[4] != queries.comment) ||
+                  (queries.home && values [5] != queries.home)){
+                 queryFlag = false;
+               }
+             }
+
+             if( queryFlag ){
+               filteredUsersArray.push(user);
+             }
+           }
+         });
+         tmpDataBuffer = JSON.stringify(filteredUsersArray);
+         //console.log(data);
+         passwd.buffer = tmpDataBuffer;
+         return tmpDataBuffer;
+       }
+     ).catch( function(err){
+       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
+       return tmpDataBuffer;
+     }).finally(function(){
+       try{
+         let usersArray = JSON.parse(tmpDataBuffer);
+         response.send(tmpDataBuffer);
+       } catch (e) {
+         response.send(tmpDataBuffer);
+       }
+     });
+  };
 // Function Calls
 // Open and read file with UTF-8 encoding
 //fs.readFile(passwd.location, {encoding:'utf-8', flag:'r'}, readCallback);
