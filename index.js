@@ -199,6 +199,11 @@ let serviceGetUsersQueryRequest = function(request, response){
          response.send(tmpDataBuffer);
      });
   };
+
+let serviceGetUsersUidRequest = function(request, response){
+  //Scaffolding
+  response.send("Received Users UID Request")
+};
 // Function Calls
 // Open and read file with UTF-8 encoding
 //fs.readFile(passwd.location, {encoding:'utf-8', flag:'r'}, readCallback);
@@ -206,5 +211,6 @@ let serviceGetUsersQueryRequest = function(request, response){
 app.get('/', serviceGetRequest);
 app.get('/users', serviceUsersRequest);
 app.get('/users/query', serviceGetUsersQueryRequest);
+app.get(/\/users\/\-*\d+/, serviceGetUsersUidRequest);
 
 app.listen(port, logPortNumber);
