@@ -376,6 +376,49 @@ let serviceGetGroupsQueryRequest = function(request, response){
                }
              }
 
+             if(queries && queries.gid == values[2]){
+               queryFlag = true;
+               if(queries.name && queries.name != values[0]){
+                 queryFlag = false;
+               }
+               if(queries.member && groups.members.length != 0){
+                 if(Array.isArray(queries.member)){
+                   //More than one member query request
+                   queries.member.forEach(function(member){
+                     if(!groups.members.includes(member)){
+                       queryFlag = false;
+                     }
+                   });
+                 } else if( typeof queries.member == "string"){
+                   if(!groups.members.includes(queries.member)){
+                     queryFlag = false;
+                   }
+                 }
+               }
+             }
+
+             if(queries && queries.member && groups.members.length != 0){
+               if(Array.isArray(queries.member)){
+                 let ticks = 0;
+                 queries.member.forEach(function(member){
+                   if(groups.members.includes(member)){
+                     ticks++;
+                   }
+                   queryFlag = ticks == queries.member.length ? true : false;
+                 });
+               } else if( typeof queries.member == "string"){
+                 if(groups.members.includes(queries.member)){
+                   queryFlag = true;
+                 }
+                 if(queries.name && queries.name != values[0]){
+                   queryFlag = false;
+                 }
+                 if(queries.gid && queries.gid != values[2]){
+                   queryFlag = false;
+                 }
+               }
+             }
+
              if( queryFlag ){
                objectifiedGroupsArray.push(groups);
              }
