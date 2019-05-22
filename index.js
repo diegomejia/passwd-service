@@ -187,7 +187,6 @@ let serviceGetUsersQueryRequest = function(request, response){
            }
          });
          tmpDataBuffer = JSON.stringify(filteredUsersArray);
-         //console.log(data);
          passwd.buffer = tmpDataBuffer;
          return tmpDataBuffer;
        }
@@ -201,8 +200,66 @@ let serviceGetUsersQueryRequest = function(request, response){
   };
 
 let serviceGetUsersUidRequest = function(request, response){
-  //Scaffolding
-  response.send("Received Users UID Request")
+  let tmpDataBuffer = "";
+  let file = readFile(passwd.location, 'utf-8').then(
+       function(data){
+         let passwdArray = data.split("\n");
+         let filteredPasswdArray = [];
+         passwdArray.forEach(function(line){
+           //remove comments(lines beginning with '#') and any empty lines
+           if(line.charAt(0) != "#" && line != ""){
+              filteredPasswdArray.push(line);
+          }
+         });
+
+         let filteredUsersArray = [];
+         // Expected format for each line, 7 values
+         // username:password:user_id:group_id:user_id_info:home_directory:shell
+         filteredPasswdArray.forEach(function(line){
+           let values = [];
+           let user = {
+             name: "",
+             uid: "",
+             gid: "",
+             comment: "",
+             home: "",
+             shell: ""
+           };
+           values = line.split(":"); //passwd and group files are colon delimited
+           if(values.length == 7){
+             //construct users object
+             user.name = values[0];
+             // skip password field values[1]
+             user.uid = values[2];
+             user.gid = values[3];
+             user.comment = values[4];
+             user.home = values[5];
+             user.shell = values[6];
+
+             //expected format '/users/<uid>'
+             //where <uid> can be any positive or negative integer
+             let url = response.req.url;
+             let uid = url.slice(url.lastIndexOf('\/')+1); //slice off number
+             if(uid == user.uid){
+               //push onto Object array
+               filteredUsersArray.push(user);
+             }
+           }
+         });
+         tmpDataBuffer = JSON.stringify(filteredUsersArray);
+         passwd.buffer = tmpDataBuffer;
+         return tmpDataBuffer;
+       }
+     ).catch( function(err){
+       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
+       return tmpDataBuffer;
+     }).finally(function(){
+       if(tmpDataBuffer == "[]"){
+         response.status(404).send("Error 404: UID not found");
+       } else {
+         response.send(tmpDataBuffer);
+       }
+     });
 };
 // Function Calls
 // Open and read file with UTF-8 encoding
