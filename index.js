@@ -455,6 +455,8 @@ let serviceGetGroupsGidRequest = function(request, response){
              if(values[3].includes(",")){
                groupMembers = values[3].split(",")
                groups.members = groupMembers;
+             } else if(values[3] != ""){
+               groups.members.push(values[3]);
              }
              //expected format '/groups/<gid>'
              //where <gid> can be any positive or negative integer
@@ -477,8 +479,104 @@ let serviceGetGroupsGidRequest = function(request, response){
 };
 
 let serviceGetUserGroupRequest = function(request, response){
-  //Scaffolding
-  response.send("Received UserGroup Request");
+  let tmpDataBuffer = "";
+  let file = readFile(passwd.location, 'utf-8').then(
+       function(data){
+         let passwdArray = data.split("\n");
+         let filteredPasswdArray = [];
+         passwdArray.forEach(function(line){
+           //remove comments(lines beginning with '#') and any empty lines
+           if(line.charAt(0) != "#" && line != ""){
+              filteredPasswdArray.push(line);
+          }
+         });
+
+         let filteredUsersArray = [];
+         // Expected format for each line, 7 values
+         // username:password:user_id:group_id:user_id_info:home_directory:shell
+         filteredPasswdArray.forEach(function(line){
+           let values = [];
+           let user = {
+             name: "",
+             gid: "",
+             members: []
+           };
+           values = line.split(":"); //passwd and group files are colon delimited
+           if(values.length == 7){
+             //construct users object
+             user.name = values[0];
+             user.gid = values[3];
+
+             //expected format '/users/<uid>/groups'
+             //where <uid> can be any positive or negative integer
+             let url = response.req.url;
+             let urlStrings = url.split('/'); //["","users","<uid>","groups"]
+             if(urlStrings[2] == values[2]){  //:user_id:
+               //push onto Object array
+               filteredUsersArray.push(user);
+             }
+           }
+         });
+
+         let groupFile = readFile(group.location, 'utf-8').then(function(groupData){
+           let groupsArray = groupData.split("\n");
+           let filteredGroupsArray = [];
+           groupsArray.forEach(function(line){
+             //remove comments(lines beginning with '#') and any empty lines
+             if(line.charAt(0) != "#" && line != ""){
+                filteredGroupsArray.push(line);
+            }
+           });
+
+           let objectifiedGroupsArray = []
+           // Expected format for each line, 4 values
+           // name:password:group_id:group_members
+           filteredGroupsArray.forEach(function(line){
+             let values = [];
+             let groups = {
+               name: "",
+               gid: "",
+               members: []
+             };
+             let groupMembers = "";
+
+             values = line.split(":"); //passwd and group files are colon delimited
+             if(values.length == 4){
+               //construct users object
+               groups.name = values[0];
+               // skip password field values[1]
+               groups.gid = values[2];
+               //push onto Object array
+               if(values[3].includes(",")){
+                 groupMembers = values[3].split(",")
+                 groups.members = groupMembers;
+               } else if(values[3] != ""){
+                 groups.members.push(values[3]);
+               }
+               objectifiedGroupsArray.push(groups);
+             }
+           });
+
+           objectifiedGroupsArray.forEach(function(groupEntry){
+             if(groupEntry.members.length != 0 && filteredUsersArray.length != 0){
+               if(groupEntry.members.includes(filteredUsersArray[0].name)){
+                 filteredUsersArray[0].members.push(groupEntry.name);
+               }
+             }
+           });
+           tmpDataBuffer = JSON.stringify(filteredUsersArray)
+           return tmpDataBuffer;
+         }).catch(function(err){
+           tmpDataBuffer = "Error attempting to read group file. Location not found."
+           return tmpDataBuffer;
+         }).finally(function(){
+           response.send(tmpDataBuffer);
+         });
+       }
+     ).catch(function(err){
+       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
+       return tmpDataBuffer;
+     });
 };
 
 // Function Calls
