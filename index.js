@@ -350,7 +350,7 @@ let serviceGetGroupsQueryRequest = function(request, response){
                groups.members = groupMembers;
              }
 
-             //push onto Object array
+             //push onto Object array based on queries
              let queries = response.req.query;
              let queryFlag = false;
 
@@ -435,6 +435,12 @@ let serviceGetGroupsQueryRequest = function(request, response){
        response.send(tmpDataBuffer);
      });
 };
+
+let serviceGetGroupsGidRequest = function(request, response){
+  //Scaffolding
+  response.send("Received Groups GID Request");
+};
+
 // Function Calls
 // Open and read file with UTF-8 encoding
 //fs.readFile(passwd.location, {encoding:'utf-8', flag:'r'}, readCallback);
@@ -445,5 +451,6 @@ app.get('/users/query', serviceGetUsersQueryRequest);
 app.get(/\/users\/\-*\d+/, serviceGetUsersUidRequest);
 app.get('/groups', serviceGetGroupsRequest);
 app.get('/groups/query', serviceGetGroupsQueryRequest);
+app.get(/\/groups\/\-*\d+/, serviceGetGroupsGidRequest);
 
 app.listen(port, logPortNumber);
