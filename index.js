@@ -2,38 +2,21 @@
 
 //Library requirements
 const express = require('express');
-const fs = require('fs');
 const readFile = require('fs-readfile-promise');
 
 // Variables
 const app = express();
 const port = 2000;
-let passwd = { buffer: "default value",
-               location: "/etc/passwd"
-             };
-let group = { location: "/etc/group"};
+let passwd = { location: "/etc/passwd" };
+let group = { location: "/etc/group" };
 
 // Function Definitions
 let logPortNumber = function(){
   console.log('passwd_service listening on port ' + port.toString());
 };
 
-let readCallback = function(error, data){
-  if(error) {
-     throw error;
-  } else {
-    passwd.buffer = data;
-  }
-};
-
 let serviceGetRequest = function(request, response){
-  //fs.readFile(passwd.location, {encoding: 'utf-8', flag: 'r'}, readCallback);
-
-   // if(file != null){
-   //   debugger;
-   //   console.log(file);
-   // }
-  response.send(passwd.buffer);
+  response.send("Status 200");
 };
 
 let serviceGetUsersRequest = function(request, response){
@@ -78,8 +61,6 @@ let serviceGetUsersRequest = function(request, response){
            }
          });
          tmpDataBuffer = JSON.stringify(filteredUsersArray);
-         //console.log(data);
-         passwd.buffer = tmpDataBuffer;
          return tmpDataBuffer;
        }
      ).catch( function(err){
@@ -188,7 +169,6 @@ let serviceGetUsersQueryRequest = function(request, response){
            }
          });
          tmpDataBuffer = JSON.stringify(filteredUsersArray);
-         passwd.buffer = tmpDataBuffer;
          return tmpDataBuffer;
        }
      ).catch( function(err){
@@ -248,7 +228,6 @@ let serviceGetUsersUidRequest = function(request, response){
            }
          });
          tmpDataBuffer = JSON.stringify(filteredUsersArray);
-         passwd.buffer = tmpDataBuffer;
          return tmpDataBuffer;
        }
      ).catch( function(err){
