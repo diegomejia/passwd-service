@@ -36,7 +36,7 @@ let serviceGetRequest = function(request, response){
   response.send(passwd.buffer);
 };
 
-let serviceUsersRequest = function(request, response){
+let serviceGetUsersRequest = function(request, response){
   let tmpDataBuffer = "";
   let file = readFile(passwd.location, 'utf-8').then(
        function(data){
@@ -497,12 +497,17 @@ let serviceGetGroupsGidRequest = function(request, response){
      });
 };
 
+let serviceGetUserGroupRequest = function(request, response){
+  //Scaffolding
+  response.send("Received UserGroup Request");
+};
+
 // Function Calls
 // Open and read file with UTF-8 encoding
 //fs.readFile(passwd.location, {encoding:'utf-8', flag:'r'}, readCallback);
 
 app.get('/', serviceGetRequest);
-app.get('/users', serviceUsersRequest);
+app.get('/users', serviceGetUsersRequest);
 app.get('/users/query', serviceGetUsersQueryRequest);
 app.get(/\/users\/\-*\d+/, serviceGetUsersUidRequest);
 app.get('/groups', serviceGetGroupsRequest);
