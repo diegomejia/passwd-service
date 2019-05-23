@@ -437,8 +437,60 @@ let serviceGetGroupsQueryRequest = function(request, response){
 };
 
 let serviceGetGroupsGidRequest = function(request, response){
-  //Scaffolding
-  response.send("Received Groups GID Request");
+
+  let tmpDataBuffer = "";
+  let file = readFile(group.location, 'utf-8').then(
+       function(data){
+         let groupsArray = data.split("\n");
+         let filteredGroupsArray = [];
+         groupsArray.forEach(function(line){
+           //remove comments(lines beginning with '#') and any empty lines
+           if(line.charAt(0) != "#" && line != ""){
+              filteredGroupsArray.push(line);
+          }
+         });
+
+         let objectifiedGroupsArray = []
+         // Expected format for each line, 4 values
+         // name:password:group_id:group_members
+         filteredGroupsArray.forEach(function(line){
+           let values = [];
+           let groups = {
+             name: "",
+             gid: "",
+             members: []
+           };
+           let groupMembers = "";
+
+           values = line.split(":"); //passwd and group files are colon delimited
+           if(values.length == 4){
+             //construct users object
+             groups.name = values[0];
+             // skip password field values[1]
+             groups.gid = values[2];
+             //push onto Object array
+             if(values[3].includes(",")){
+               groupMembers = values[3].split(",")
+               groups.members = groupMembers;
+             }
+             //expected format '/groups/<gid>'
+             //where <gid> can be any positive or negative integer
+             let url = response.req.url;
+             let gid = url.slice(url.lastIndexOf('\/')+1); //slice off number
+             if(gid == groups.gid){
+               //push onto Object array
+               objectifiedGroupsArray.push(groups);
+             }
+           }
+         });
+         tmpDataBuffer = JSON.stringify(objectifiedGroupsArray);
+         return tmpDataBuffer;
+       }).catch( function(err){
+       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
+       return tmpDataBuffer;
+     }).finally(function(){
+       response.send(tmpDataBuffer);
+     });
 };
 
 // Function Calls
