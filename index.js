@@ -6,9 +6,30 @@ const readFile = require('fs-readfile-promise');
 
 // Variables
 const app = express();
+
+let args = process.argv;
 const port = 2000;
 let passwd = { location: "/etc/passwd" };
 let group = { location: "/etc/group" };
+
+//change default values if requested
+if(args.length > 3){
+  if(args[2] == "-passwd"){
+    passwd.location = args[3];
+  }
+  if(args[2] == "-group"){
+    group.location = args[3];
+  }
+}
+
+if(args.length > 5){
+  if(args[4] == "-passwd"){
+    passwd.location = args[5];
+  }
+  if(args[4] == "-group"){
+    group.location = args[5];
+  }
+}
 
 // Function Definitions
 let logPortNumber = function(){
