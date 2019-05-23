@@ -309,7 +309,11 @@ let serviceGetGroupsRequest = function(request, response){
        tmpDataBuffer = "Error attempting to read file. Location does not exist.";
        return tmpDataBuffer;
      }).finally(function(){
-       response.send(tmpDataBuffer);
+       if(tmpDataBuffer == "[]"){
+         response.status(404).send("Error 404: GID not found");
+       } else {
+         response.send(tmpDataBuffer);
+       }
      });
 };
 
