@@ -509,9 +509,11 @@ let serviceGetUserGroupRequest = function(request, response){
 app.get('/', serviceGetRequest);
 app.get('/users', serviceGetUsersRequest);
 app.get('/users/query', serviceGetUsersQueryRequest);
+app.get(/\/users\/\-*\d+\/groups/,serviceGetUserGroupRequest);
 app.get(/\/users\/\-*\d+/, serviceGetUsersUidRequest);
 app.get('/groups', serviceGetGroupsRequest);
 app.get('/groups/query', serviceGetGroupsQueryRequest);
 app.get(/\/groups\/\-*\d+/, serviceGetGroupsGidRequest);
+
 
 app.listen(port, logPortNumber);
