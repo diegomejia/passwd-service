@@ -8,7 +8,7 @@ module.exports = {
       .url('http://localhost:2000/users/94/groups')
       .waitForElementVisible('body')
       .pause(1000)
-      .assert.containsText('body', '[{"name":"_teamsserver","gid":"94","members":["mail"]}]')
+      .assert.containsText('body', '[{"name":"_teamsserver","gid":"94","members":["mail","_webauthserver"]}]')
       .url('http://localhost:2000/users/-2/groups')
       .waitForElementVisible('body')
       .pause(1000)
