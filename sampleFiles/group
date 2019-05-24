@@ -18,3 +18,4 @@ tty:*:4:root
 operator:*:5:root
 mail:*:6:_teamsserver
 bin:*:7:
+_webauthserver:*:221:_teamsserver,_devicemgr
