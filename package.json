@@ -12,5 +12,8 @@
     "express": "^4.17.0",
     "fs-readfile-promise": "^3.0.1",
     "nightwatch": "^1.1.11"
+  },
+  "devDependencies": {
+    "chromedriver": "^74.0.0"
   }
 }
