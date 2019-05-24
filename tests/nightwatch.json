@@ -1,6 +1,7 @@
 {
   "webdriver": {
     "start_process": true,
+    "log_path": false,
     "server_path": "../node_modules/.bin/chromedriver",
     "cli_args": [
       "--verbose"
