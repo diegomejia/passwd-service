@@ -299,6 +299,8 @@ let serviceGetGroupsRequest = function(request, response){
              if(values[3].includes(",")){
                groupMembers = values[3].split(",")
                groups.members = groupMembers;
+             } else if(values[3] != ""){
+               groups.members.push(values[3]);
              }
              objectifiedGroupsArray.push(groups);
            }
@@ -354,6 +356,8 @@ let serviceGetGroupsQueryRequest = function(request, response){
              if(values[3].includes(",")){
                groupMembers = values[3].split(",")
                groups.members = groupMembers;
+             } else if(values[3] != ""){
+               groups.members.push(values[3]);
              }
 
              //push onto Object array based on queries
