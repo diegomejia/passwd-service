@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.0",
-    "fs-readfile-promise": "^3.0.1"
+    "fs-readfile-promise": "^3.0.1",
+    "nightwatch": "^1.1.11"
   }
 }
