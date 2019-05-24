@@ -33,3 +33,28 @@ Is printed in the terminal to verify the (ExpressJS) server is running and liste
 To send a request open a web browser and go to http://localhost:2000/
 
 To STOP the server hit Ctrl-C in the terminal window running it.
+
+# Running Unit Tests
+
+This module comes with the NightwatchJS test runner, and the ChromeDriver NPM modules installed and configured for use.
+
+The tests base their expected results on the sampleFiles/passwd and sampleFiles/group text files, formatted the way a system file would be. Before running the tests with Nightwatch first make sure there is an instance of passwd-service running with the sample files loaded like so:
+
+```
+node index.js -passwd sampleFiles/passwd  -group sampleFiles/group
+```
+
+To run tests using sampleFiles/passwd and sampleFiles/group for expected results open a new terminal window navigate to the top level of the project directory and run:
+
+```
+node ./node_modules/.bin/nightwatch tests
+```
+
+This will run through all the currently written unit tests by opening up Chrome windows, going to the specified URLs and checking for specific JSON output in the page body.
+
+To run an individual test file at a time navigate to the tests directory and run:
+```
+node ../node_modules/.bin/nightwatch testModule.js
+```
+
+XML Test results are saved in tests_output directory.
