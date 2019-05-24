@@ -17,20 +17,28 @@ node index.js
 ```
 This will try to read information from "/etc/passwd" and "/etc/group" by default depending on the request.
 
-To set the paths of the passwd and group file manually use one or both of the command line options
-
--passwd /path/to/passwd
--group /path/to/group
-
-Absolute paths to files are expected, for Example:
+To set the paths of the passwd and group file locations manually use the command line options
+```
+-passwd /path/to/passwd_file
+-group /path/to/group_file
+```
+Both absolute and relative file paths are accepted:
 ```
 node index.js -passwd /Users/user1/Desktop/passwdTestfFile -group /Users/user1/Desktop/groupTestFile
 ```
-"passwd-service listening on port 2000"
-
+or
+```
+node index.js -passwd sampleFiles/passwd -group sampleFiles/group
+```
+The port the server runs on is also configurable with a command line option -port (2000 by default):
+```
+node index.js -port 5000
+passwd_service listening on port 5000
+```
+"passwd_service listening on port XXXX"
 Is printed in the terminal to verify the (ExpressJS) server is running and listening for GET requests.
 
-To send a request open a web browser and go to http://localhost:2000/
+To send a request open a web browser and go to http://localhost:2000/ (or the port you've set)
 
 To STOP the server hit Ctrl-C in the terminal window running it.
 
