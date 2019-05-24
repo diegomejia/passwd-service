@@ -85,7 +85,8 @@ let serviceGetUsersRequest = function(request, response){
          return tmpDataBuffer;
        }
      ).catch( function(err){
-       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
+       tmpDataBuffer = "Error attempting to read file. Location \"" +
+                       passwd.location + "\" does not exist.";
        return tmpDataBuffer;
      } ).finally(function(){
        response.send(tmpDataBuffer);
@@ -193,8 +194,8 @@ let serviceGetUsersQueryRequest = function(request, response){
          return tmpDataBuffer;
        }
      ).catch( function(err){
-       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
-       return tmpDataBuffer;
+       tmpDataBuffer = "Error attempting to read file. Location \"" +
+                       passwd.location + "\" does not exist.";
      }).finally(function(){
          //respond with either JSON or No File Error
          response.send(tmpDataBuffer);
@@ -252,8 +253,8 @@ let serviceGetUsersUidRequest = function(request, response){
          return tmpDataBuffer;
        }
      ).catch( function(err){
-       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
-       return tmpDataBuffer;
+       tmpDataBuffer = "Error attempting to read file. Location \"" +
+                       passwd.location + "\" does not exist.";
      }).finally(function(){
        if(tmpDataBuffer == "[]"){
          response.status(404).send("Error 404: UID not found");
@@ -595,8 +596,8 @@ let serviceGetUserGroupRequest = function(request, response){
          });
        }
      ).catch(function(err){
-       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
-       return tmpDataBuffer;
+       tmpDataBuffer = "Error attempting to read file. Location \"" +
+                       passwd.location + "\" does not exist.";
      });
 };
 
