@@ -4,11 +4,12 @@
 const express = require('express');
 const readFile = require('fs-readfile-promise');
 
-// Variables
+// Constants
 const app = express();
+const args = process.argv;
 
-let args = process.argv;
-const port = 2000;
+// Variables
+let port = 2000;
 let passwd = { location: "/etc/passwd" };
 let group = { location: "/etc/group" };
 
@@ -20,6 +21,9 @@ if(args.length > 3){
   if(args[2] == "-group"){
     group.location = args[3];
   }
+  if(args[2] == "-port" && Number.parseInt(args[3]) != NaN){
+    port = Number.parseInt(args[3]);
+  }
 }
 
 if(args.length > 5){
@@ -29,6 +33,21 @@ if(args.length > 5){
   if(args[4] == "-group"){
     group.location = args[5];
   }
+  if(args[4] == "-port" && Number.parseInt(args[5]) != NaN){
+    port = Number.parseInt(args[5]);
+  }
+}
+
+if(args.length > 7){
+    if(args[6] == "-passwd"){
+      passwd.location = args[7];
+    }
+    if(args[6] == "-group"){
+      group.location = args[7];
+    }
+    if(args[6] == "-port" && Number.parseInt(args[7]) != NaN){
+      port = Number.parseInt(args[7]);
+    }
 }
 
 // Function Definitions
