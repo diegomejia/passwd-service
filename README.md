@@ -12,9 +12,9 @@ https://nodejs.org/en/
 
 Next clone or download the passwd-service project.
 To run the local server (port 2000) open a terminal, go to passwd-service folder and run:
-
+```
 node index.js
-
+```
 This will try to read information from "/etc/passwd" and "/etc/group" by default depending on the request.
 
 To set the paths of the passwd and group file manually use one or both of the command line options
@@ -23,9 +23,9 @@ To set the paths of the passwd and group file manually use one or both of the co
 -group /path/to/group
 
 Absolute paths to files are expected, for Example:
-
+```
 node index.js -passwd /Users/user1/Desktop/passwdTestfFile -group /Users/user1/Desktop/groupTestFile
-
+```
 "passwd-service listening on port 2000"
 
 Is printed in the terminal to verify the (ExpressJS) server is running and listening for GET requests.
