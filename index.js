@@ -307,7 +307,8 @@ let serviceGetGroupsRequest = function(request, response){
          return tmpDataBuffer;
        }
      ).catch( function(err){
-       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
+       tmpDataBuffer = "Error attempting to read file: \"" +
+                       group.location + "\" Location not found."
        return tmpDataBuffer;
      }).finally(function(){
        if(tmpDataBuffer == "[]"){
@@ -434,7 +435,8 @@ let serviceGetGroupsQueryRequest = function(request, response){
          return tmpDataBuffer;
        }
      ).catch( function(err){
-       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
+       tmpDataBuffer = "Error attempting to read file: \"" +
+                       group.location + "\" Location not found."
        return tmpDataBuffer;
      }).finally(function(){
        response.send(tmpDataBuffer);
@@ -493,8 +495,9 @@ let serviceGetGroupsGidRequest = function(request, response){
          tmpDataBuffer = JSON.stringify(objectifiedGroupsArray);
          return tmpDataBuffer;
        }).catch( function(err){
-       tmpDataBuffer = "Error attempting to read file. Location does not exist.";
-       return tmpDataBuffer;
+         tmpDataBuffer = "Error attempting to read file: \"" +
+                         group.location + "\" Location not found."
+         return tmpDataBuffer;
      }).finally(function(){
        response.send(tmpDataBuffer);
      });
@@ -589,7 +592,8 @@ let serviceGetUserGroupRequest = function(request, response){
            tmpDataBuffer = JSON.stringify(filteredUsersArray)
            return tmpDataBuffer;
          }).catch(function(err){
-           tmpDataBuffer = "Error attempting to read group file. Location not found."
+           tmpDataBuffer = "Error attempting to read file: \"" +
+                           group.location + "\" Location not found."
            return tmpDataBuffer;
          }).finally(function(){
            response.send(tmpDataBuffer);
