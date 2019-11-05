@@ -8,6 +8,7 @@ Run at your own risk.
 
 Requires NodeJS to be installed.
 Can be found here: 
+
 https://nodejs.org/en/
 
 Next clone or download the passwd-service project.
@@ -66,3 +67,4 @@ node ../node_modules/.bin/nightwatch testModule.js
 ```
 
 XML Test results are saved in tests_output directory.
+
